@@ -1,0 +1,214 @@
+---
+title: "Class 6: R Functions"
+author: "Kira"
+format: gfm
+---
+
+## R Functions
+
+In this session we will work through the process of developing our own function for calculating average grades for fictional students in a fictional class.
+
+We will start with a simplified version of the problem. Grade some vectors of student scores. We want to drop the lowest score and get the average.
+
+
+```{r}
+# Example input vectors to start with
+student1 <- c(100, 100, 100, 100, 100, 100, 100, 90)
+student2 <- c(100, NA, 90, 90, 90, 90, 97, 80)
+student3 <- c(90, NA, NA, NA, NA, NA, NA, NA)
+```
+
+We can use the `mean()` function to get the average:
+
+```{r}
+mean(student1)
+```
+
+We can find the smallest value with the `min()` function.
+
+```{r}
+min(student1)
+```
+There is also the `which.min()` function. Let's see if this can help:
+
+```{r}
+student1
+```
+
+```{r}
+which.min(student1)
+```
+
+```{r}
+student1[which.min(student1)]
+```
+
+```{r}
+x <- 1:5
+x
+```
+```{r}
+x[-4]
+```
+Let's put this together to drop the lowest value and find the average.
+
+```{r}
+mean(student1[-which.min(student1)])
+```
+
+Now what about student2?
+
+```{r}
+student2
+```
+
+```{r}
+mean(student2[-which.min(student2)], na.rm=TRUE)
+```
+
+Hmmm....ok what about student 3?
+
+```{r}
+student3
+```
+
+```{r}
+mean(student3[-which.min(student3)], na.rm=TRUE)
+```
+
+```{r}
+mean(student3, na.rm=TRUE)
+```
+
+So this sucks! This inflates grades as it drops all the NAs before determining the mean...
+
+It seems like the function `is.na()` might be useful.
+
+```{r}
+student3
+is.na(student3)
+```
+
+```{r}
+student2
+is.na(student2)
+```
+
+I can use a logical vector to index another vector.
+
+```{r}
+student2[is.na(student2)] <- 0
+student2
+```
+
+```{r}
+x <- student3
+x[is.na(x)] <- 0
+x
+```
+
+```{r}
+x <- student2
+x[is.na(x)] <- 0
+mean(x[-which.min(x)])
+```
+
+We have our working snippet of code! This is now going to be the body of our function. 
+
+All functions in R have at least 3 things:
+- A name (we pick that)
+- input arguments
+- a body (the code that does the work)
+#Q1:
+Working R function to calculate the average and drop the lowest score:
+
+```{r}
+grade <- function(x){
+  # Mask NA to zero
+  x[is.na(x)] <- 0
+  # Drop lowest value and get mean
+  mean(x[-which.min(x)])
+}
+```
+
+Make sure to press play to send it to the R "brain". Let's try it out with student 1.
+
+```{r}
+grade(student1)
+grade(student2)
+grade(student3)
+```
+
+```{r}
+gradebook <- read.csv("https://tinyurl.com/gradeinput",row.names=1)
+head(gradebook)
+```
+
+I can use the complicated but useful function `apply()` to use our existing `grade()` function on the whole class gradebook.
+
+How does the `apply()` function work?
+
+```{r}
+results <- apply(gradebook,1,grade)
+results
+```
+
+>Q2. Using your grade() function and the supplied gradebook, Who is the top scoring student overall in the gradebook? [3pts]
+
+```{r}
+which.max(results)
+```
+
+>Q3. From your analysis of the gradebook, which homework was toughest on students (i.e. obtained the lowest scores overall? [2pts]
+
+```{r}
+which.min(apply(gradebook,2,sum,na.rm=TRUE))
+```
+Homework 2 had the lowest scores overall.
+
+```{r}
+# not a good way
+which.min(apply(gradebook,2,mean,na.rm=TRUE))
+```
+
+If I want to use the mean approach, I will need to mask the NA (missing homeworks) to zero first.
+
+```{r}
+mask <- gradebook
+mask[is.na(mask)] <- 0
+mask
+```
+
+```{r}
+which.min(apply(mask,2,mean,na.rm=TRUE))
+```
+
+>Q4. Optional Extension: From your analysis of the gradebook, which homework was most predictive of overall score (i.e. highest correlation with average grade score)? [1pt]
+
+Here we are going to look at the correlation of each Homework results (i.e the columns in the gradebook) with the overall grade of students from the course (in the `results` object obtained from using our `grade()` function).
+
+```{r}
+results
+```
+
+```{r}
+mask$hw4
+```
+
+I am going to use the `cor()` function:
+
+```{r}
+cor(results,mask$hw4)
+```
+
+```{r}
+cor(results,mask$hw5)
+```
+
+I can use the `apply()` function to find the correlation for all homework assignments at once.
+
+```{r}
+apply(mask,2,cor, y=results)
+```
+
+Homework 5 was most predictive of overall score (i.e highest correlation).
