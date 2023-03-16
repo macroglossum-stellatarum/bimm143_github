@@ -1,7 +1,7 @@
 ---
 title: "Class 7: Machine Learning 1"
 author: "Kira"
-format: pdf
+format: gfm
 ---
 
 In this class we will explore clustering and dimensionality reduction methods.
