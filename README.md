@@ -9,7 +9,7 @@ My classwork from [BIMM143](https://bioboot.github.io/bimm143_W23/) at UC San Di
 - Class 9: [Structural Bioinformatics](https://github.com/macroglossum-stellatarum/bimm143_github/blob/main/class09/Class09_StructuralBioniformatics1.md)
 - Class 10: [Halloween Candy Mini-Project](https://github.com/macroglossum-stellatarum/bimm143_github/blob/main/class10/Lab10_CandyProject%20copy.pdf)
 - Class 11: [Genome Informatics](https://github.com/macroglossum-stellatarum/bimm143_github/blob/main/class11/class11_genomeinformatics.md)
-- Class 12: [RNA-Seq Analysis]()
+- Class 12: [RNA-Seq Analysis](https://github.com/macroglossum-stellatarum/bimm143_github/blob/main/class12/Class12_Transcrip-RNA-Seq%20(1).pdf)
 - Class 13: [RNA-Seq Mini-Project]()
 - Class 17: [Vaccination Rate Mini-Project]()
 - Class 18: [Mutational Signatures of Cancer Mini-Project]()
